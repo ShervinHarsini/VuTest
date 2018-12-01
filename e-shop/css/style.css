@@ -1644,6 +1644,7 @@ textarea.input {
   height: 40px;
   background: #30323A;
   z-index: 22;
+  border-radius: 25px;
 }
 
 .slick-prev:hover, .slick-prev:focus, .slick-next:hover, .slick-next:focus {
@@ -1728,3 +1729,43 @@ textarea.input {
     width: 100%;
   }
 }
+/* */
+.openAlways {
+    opacity: 1!important;
+    visibility: visible!important;
+	    transform: translate(0px, 0px)!important;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.alert-success {
+    color: #ffffff;
+    background-color: #30323a;
+    text-align: center;
+    border-color: #d6e9c6;
+    position: fixed;
+    margin: 0 auto;
+    margin-right: auto;
+    width: 28%;
+    /* margin-left: auto; */
+    font-size: 12pt;
+    z-index: 9999999;
+    transition: 1s;
+    opacity: 0;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.alert-success.fadeIn {
+	opacity: 1;
+}
+
+.alert-success.fadeOut {
+	opacity: 0;
+}
+

@@ -34,7 +34,7 @@
       }
     }
   });
-
+/*
   // HOME SLICK
   $('#home-slick').slick({
     autoplay: true,
@@ -142,6 +142,6 @@
         'max': 999
       }
     });
-  }
+  }*/
 
 })(jQuery);

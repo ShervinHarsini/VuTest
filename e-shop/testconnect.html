@@ -1,0 +1,82 @@
+<html>
+<head>
+	<script src="js/jquery.js"></script>
+</head>
+
+<body>
+
+
+
+
+<script>
+var endpoints = [
+	{method: "POST", name: "getProduct", url: "/hello", data: {status : "OK"}, dataErr: {status : "KO"}, props : ['props']}
+]
+
+function dispatch(something, prop){
+	var fund = {};
+	for(var i = 0; i < endpoints.length ; i++){
+		if(endpoints[i].name == something){
+			fund = endpoints[i]
+			var postOK = false;
+			for (var a = 0; a < endpoints[i].props.length; a++){
+				for(var c = 0; c < Object.keys(prop).length; c++){
+					if(endpoints[i].props[a] !== Object.keys(prop)[c]){
+						return jQuery.ready.promise().then(data => {return fund.dataErr})
+					}
+				
+				}
+			}
+		}
+	}
+	
+	
+	return jQuery.ready.promise().then(data => {return fund.data})
+}
+
+/*
+* This part is for mock the calling to API
+* @param func
+* @param res
+*/ 
+function promise(func, res){
+setTimeout(function(){func.then(dt => {res(dt)})},1000)
+}
+
+var store = {
+    endpoint: {
+		valueEndpoint : "product",
+		setEndpoint : function(end){store.endpoint.valueEndpoint = end; return true},
+	},
+	loading : {
+		valueLoader: false,
+		getLoad : function(end){if(end === store.endpoint.valueEndpoint){return store} else {return false}},
+		setLoad : function(){this.valueLoader = !this.valueLoader; return this.getLoad(store.endpoint.valueEndpoint)},
+	},
+	data : {
+		dataValue : [],
+		getData : function(end, func){if(end === store.endpoint.valueEndpoint){func(store)} else {return func([])}},
+		reqData : function(props, init, func){ init(store.loading.setLoad()), promise(dispatch(store.endpoint.valueEndpoint, props), function(dt){store.data.setData(dt, func)})},
+		setData : function(data, func){store.loading.setLoad(); this.dataValue = data; return this.getData(store.endpoint.valueEndpoint, func)},
+	}
+}
+
+function disp(end){
+	if(end !== undefined){
+		store.endpoint.setEndpoint(end)
+	}
+	return store 
+}
+
+
+disp("getProduct").data.reqData({props : 25}, function(store){console.log(store.loading.valueLoader)}, function(store){console.log(store.loading.valueLoader);console.log(store.data.dataValue)})
+
+
+
+
+
+</script>
+</body>
+
+
+</html>
