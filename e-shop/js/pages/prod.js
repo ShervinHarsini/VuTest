@@ -1,28 +1,18 @@
 var product = {
 template : `
 <div>
-	<div class="section">
+	<div class="section prod">
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
 			<div class="row">
 				<!--  Product Details -->
-				<loader :isLoading="isLoading.value" :data="product"></loader>
+				<loader :is-loading="isLoading.val" :data="product"></loader>
 				<transition name="fade">
+				
+				
 				<div v-show="!!product" class="product product-details clearfix">
-					<div class="col-md-6">
-						<div id="product-main-view" class="product-main-view">
-							<div v-for="image in product.images" class="product-view">
-								<img :src="image.src" alt="">
-							</div>
-						</div>
-						<div id="product-view" class="product-view">
-							<div v-for="image in product.images" class="product-view">
-								<img :src="image.src" alt="">
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 ismobile">
 						<div class="product-body">
 							<div class="product-label">
 								<span>New</span>
@@ -38,6 +28,38 @@ template : `
 							</div>
 							<p><strong>Availability:</strong> {{product.availability}}</p>
 							<p><strong>Brand:</strong> {{product.availability}}</p>
+					</div>
+					</div>
+					<div class="col-md-6">
+						<div id="product-main-view" class="product-main-view">
+							<div v-for="image in product.images" class="product-view">
+								<img :src="image.src" alt="">
+							</div>
+						</div>
+						<div id="product-view" class="product-view">
+							<div v-for="image in product.images" class="product-view">
+								<img :src="image.src" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="product-body">
+						<div class="ismobileProd">
+							<div class="product-label">
+								<span>New</span>
+								<span class="sale">-20%</span>
+							</div>
+							<h2 class="product-name">Product Name Goes Here</h2>
+							<h3 class="product-price">{{product.price}} <del class="product-old-price">{{product.oldPrice}}</del></h3>
+							<div>
+								<div class="product-rating">
+									<i v-for="rateItem in rate(product.rating)" :class="{'fa fa-star': rateItem, 'fa fa-star-o empty': !rateItem}"></i>
+								</div>
+								<a href="#">3 Review(s) / Add Review</a>
+							</div>
+							<p><strong>Availability:</strong> {{product.availability}}</p>
+							<p><strong>Brand:</strong> {{product.availability}}</p>
+						</div>
 							<p>{{product.description}}</p>
 							<div class="product-options">
 								<ul class="size-option">
@@ -194,9 +216,9 @@ template : `
 	<div class="section">
 		<!-- container -->
 		<div class="container">
-			<!-- row -->
+			<!-- row 
 			<pickedforyou-component></pickedforyou-component>
-			<!-- /row -->
+			/row -->
 		</div>
 		<!-- /container -->
 	</div>

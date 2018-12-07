@@ -1769,3 +1769,149 @@ textarea.input {
 	opacity: 0;
 }
 
+.product-hot {
+    border: 2px solid #F8694A;
+    border-left: 0px solid #F8694A;
+    border-right: 0px solid #F8694A;
+    border-top: 0px solid #F8694A;
+    border-right: 0px solid #F8694A;
+}
+
+.grid {
+  position: relative;
+  width: 100%;
+  height: 1000px;
+  text-align: center;
+  margin: auto;
+}
+.item {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  margin: 5px
+}
+.item.muuri-item-dragging {
+  z-index: 3;
+}
+.item.muuri-item-releasing {
+  z-index: 2;
+}
+.item.muuri-item-hidden {
+  z-index: 0;
+}
+.item-content {
+  position: relative;
+}
+
+.grid-stack {
+	width: 100%
+}
+
+.grid-stack-item .banner.banner-1{
+margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    margin-top: 15px;
+}
+
+.grid-stack-item .banner.banner-1 > img{
+width : 100%;
+height : 100%;
+}
+
+.header-search {
+    display: inline-block;
+    padding: 15px 0px;
+    width: 510px;
+}
+
+.selectize-input {
+    border: 1px solid #d0d0d0;
+    padding: 8px 8px;
+    display: inline-block;
+    width: 100%;
+    height: 96%;
+    top: 1px;
+}
+
+.selectize-control.multi .selectize-input > div {
+    cursor: pointer;
+    margin: 0 3px 3px 0;
+    padding: 4px 6px;
+    background: #f8694a;
+    color: #ffffff;
+    border: 0 solid #d0d0d0;
+    border-radius: 9px;
+}
+.header-search>form .search-input {
+    /*padding-left: 0px!important;*/
+    padding-right: 45px;
+}
+.fized {
+	position: relative;
+    display: block;
+    width: 100%;
+}
+.notfized{
+	display:block
+}
+.bodyPage, .bodyPageHome {
+	margin-top: 0px;
+}
+#aside {
+	padding: 0px;
+}
+.store-filter.clearfix {
+	padding: 0px;
+}
+.ismobile{
+	display:none;
+}
+.ismobileProd{
+	display:block;
+}
+.section.prod {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+@media only screen and (max-width: 700px) {
+.store-filter.clearfix {
+	padding: 25px;
+}
+#aside {
+	padding: 38px;
+}
+.notfized{
+	display:none
+}
+.section.prod {
+    padding-top: 0px;
+    padding-bottom: 30px;
+}	
+.fized {
+position: fixed;
+    display: block;
+    width: 100%;
+	top:0px;
+    height: 218px;
+    background-color: #fff;
+    z-index: 513;
+    border-bottom: 1px solid #888;
+    box-shadow: 0 0 2px 0 #888;
+}
+.fized #header {
+	padding-top: 0px;
+}
+.bodyPage {
+	margin-top: 150px;
+}
+.bodyPageHome {
+	margin-top: 165px;
+}
+.ismobile{
+	display:block;
+}
+.ismobileProd{
+	display:none;
+}
+}

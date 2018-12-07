@@ -11,7 +11,33 @@ var endpoints = [
 				images : [{src:'./img/main-product01.jpg', color: 'rgb(71, 89, 132)' },{src:'./img/main-product02.jpg', color: 'rgb(138, 36, 84)'},{src:'./img/main-product03.jpg', color: 'rgb(191, 105, 137)'},{src:'./img/main-product04.jpg', color: 'rgb(154, 84, 216)'}],
 				size : ['S','XL','SL']
 				
-	}}, dataErr: {status : "KO"}, props : ['props']}
+	}}, dataErr: {status : "KO"}, props : ['props']},
+	{method: "POST", name: "getProducts", url: "/hello", data: { product : [
+	{
+		productLabel : [{name : "New"},{name : "-20%"}],
+		image : "./img/product01.jpg",
+		price : "$32.50",
+		oldPrice : "$620.50",
+		productName : "Bags",
+		rating : "5",
+	},
+	{
+		productLabel : [{name : "New"},{name : "-20%"}],
+		image : "./img/product01.jpg",
+		price : "$32.50",
+		oldPrice : "$62.50",
+		productName : "Bags",
+		rating : "5",
+	},
+	{
+		productLabel : [{name : "New"},{name : "-20%"}],
+		image : "./img/product01.jpg",
+		price : "$32.50",
+		oldPrice : "$62.50",
+		productName : "Bags",
+		rating : "5",
+	}
+	]}, dataErr: {status : "KO"}, props : ['props']},
 ]
 
 function dispatch(something, prop){
@@ -41,7 +67,7 @@ function dispatch(something, prop){
 * @param res
 */ 
 function promise(func, res){
-setTimeout(function(){func.then(dt => {res(dt)})},1000)
+setTimeout(function(){func.then(dt => {res(dt)})},5000)
 }
 
 var store = {

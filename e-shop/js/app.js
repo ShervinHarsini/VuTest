@@ -150,16 +150,42 @@ Vue.component('menu-component',{
 Vue.component('search-component', {
 	template: [
 		'<form>',
-			'<input class="input search-input" type="text" :placeholder="dict.EnterKeyword">',
+			'<input  @keyup="saveData($event.target.value)" class="input search-input" type="text" :placeholder="dict.EnterKeyword" :value="search">',
 			'<select class="input search-categories">',
 				'<option v-for="cat in categories" :value="cat.code">{{dict[cat.label]}}</option>',
 			'</select>',
-			'<button class="search-btn"><i class="fa fa-search"></i></button>',
-		'</form>'	
+			'<button @click="updatesearch()" class="search-btn"><i class="fa fa-search"></i></button>',
+		'</form>'
 	].toString().replace(/\,/g,""),
-	props:['categories','dict']
+	data: function(){
+		return {
+			searchTerm : ''
+		}
+	},
+	props:['categories','dict','search'],
+	methods:{
+		emitSearch : function(val){
+			this.$emit('set-search', val)
+		},
+		saveData: function(val){
+			this.searchTerm = val
+			this.updatesearch()
+		},
+		updatesearch : function(val){
+			this.emitSearch(this.searchTerm)
+			if(this.searchTerm !== ''){
+			window.location = '#/products'
+			} else {
+			window.location = '#/home'	
+			}			
+		}
+	},
+	mounted: function(){
+		this.searchTerm = this.search
+	}
 	
 })
+
 
 
 Vue.component('verticalmenu-component', {
@@ -268,13 +294,6 @@ data : function(){return {
 			
 )
 
-Vue.component('loader', {
-	template : `
-		<div v-show="isLoading && !data" style="width: 100%;text-align: center;"><img width="200px" src="https://i.gifer.com/7YQl.gif"></div>
-	`,
-	props:['isLoading', 'data'],
-})		
-	
 Vue.component('menuitems-component',{
 	template : 
 						`
@@ -410,8 +429,9 @@ var ecommerce = new Vue({
   data:{
 	  current : '/',
 	  Lang : "ENG",
+	  search : '',
 	  Currency : "USD",
-	  isLoading : { value : false, endpoint : ""},
+	  isLoading : { val : false, endpoint : ""},
 	  settings : {
 		  Languages : [
 		  {code : 'ENG', label : "English (ENG)"},
@@ -445,6 +465,10 @@ var ecommerce = new Vue({
 	  selectedDict : {}
   },
   methods: {
+	  setSearch : function(val){
+		  this.search = val
+		  eventHub.$emit('reload-products')
+	  },
 	  changeLanguage : function (Lang){
 		  this.Lang = Lang;
 	  },
@@ -458,13 +482,13 @@ var ecommerce = new Vue({
 			  return true
 		  }
 	  },
-	  setLoad : function(end){
-		this.isLoading.value = !this.isLoading.value;
+	  setLoad : function(end,val){
+		this.isLoading.val = val;
 		this.isLoading.endpoint = end
 	  },
 	  reqData : function(endpoint, data, fillData){
 		var _this = this;
-		this.providerService(endpoint).start(data, function(store){_this.setLoad(endpoint)}, function(store){_this.setLoad(""); fillData(store.data.dataValue)})
+		this.providerService(endpoint).start(data, function(store){_this.setLoad(endpoint, true)}, function(store){_this.setLoad(endpoint, false); fillData(store.data.dataValue)})
 	  }
   },
   beforeMount: function(){

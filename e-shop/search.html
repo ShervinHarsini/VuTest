@@ -1,0 +1,86 @@
+<html>
+<head>
+	<script src="js/jquery.js"></script>
+		<script src="js/vue.js"></script>
+
+<style>
+.searchbox {
+	width: 282px;
+    background-color: #fff;
+    box-shadow: 0 1px 4px 0px;
+
+}
+ul{
+    margin: 0px;
+    display: contents;
+}
+ul li {
+    text-align: center;
+    height: 25px;
+    background-color: #ccc;
+    padding: 5px;
+}
+
+input{
+   width: 284px;
+   height: 29px;
+}
+</style>		
+</head>
+
+
+<body>
+
+<input id="search" value=""/>
+<div class="searchbox">
+<ul id="list">
+
+</ul>
+</div>
+</body>
+
+
+<script>
+$("#list").hide()
+var search = ["hel", "hello", "shervin"]
+var wordFounded = []
+
+$(document).on("click", "ul li", function(){
+	$("#search").val($(this).text() + " ")
+	$("#list").empty()
+}
+)
+
+$("#search").on("keyup", function(){
+	var word = this.value.split(" ")
+	if(word[word.length - 1] !== ""){
+	if(wordFounded.length === 0){
+		$("#list").empty()
+	}
+	for(var i = 0; i < search.length; i++){
+		if(search[i].match(word[word.length - 1])){
+			wordFounded.push(search[i])
+		} else {
+			
+		}
+	}
+	if(wordFounded.length > 0){
+	for(var a = 0; a < wordFounded.length; a++){
+		if(word.length > 1){
+		$("#list").append("<li>"+word.toString().replace(/,/g, " ").slice(0, Math.floor(this.value.length - word[word.length - 1].length - 1))+ " " +wordFounded[a]+"</li>")
+		} else {
+		$("#list").append("<li>"+wordFounded[a]+"</li>")
+		}
+	}
+	$("#list").show()
+	}
+	wordFounded = []
+	} else {
+		$("#list").hide()
+	}
+	
+})
+
+</script>
+
+</html>
