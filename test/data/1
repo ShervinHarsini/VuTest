@@ -1,1 +1,17 @@
-{"title":"Lorem ipsum","body":"At vero eos et accusam et justo duo dolores et ea rebum.","tags":["lorem","ipsum"],"good":"I am tired"}
+{  
+   "productLabel":[  
+      {  
+         "name":"New"
+      },
+      {  
+         "name":"-20%"
+      }
+   ],
+   "image":"./img/product01.jpg",
+   "price":"32.50",
+   "oldPrice":"620.50",
+   "productName":"syper",
+   "description":"A woman's handbag is an integral part of her outfit. A handbag is more than just a sack to carry essentials. It's a fashion statement, a way to express her style and creativity. Handbags come in many shapes, sizes, colors, prices and labels.",
+   "rating":"5",
+   "fk":"1"
+}

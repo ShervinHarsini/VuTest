@@ -1,0 +1,81 @@
+<html>
+<head>
+	<script src="js/jquery.js"></script>
+	<script src="js/selectize.js"></script>
+	<link type="text/css" rel="stylesheet" href="css/selectize.css" />
+</head>
+
+<body>
+<div style="width:400px">
+<label for="select-to">Email:</label>
+<select id="select-to" class="contacts" placeholder="Pick some people..."></select>
+</div>
+<script>
+var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+                  '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+				  
+
+$(document).on("click", ".delete", function(){
+	control.removeItem($(this).attr('data-value'))
+})
+				  
+function deleteItem(item){
+	alert("hello")
+}				  
+
+var selectize = $('#select-to').selectize({
+    persist: false,
+	selectOnTab: true,
+    maxItems: null,
+    valueField: 'email',
+    labelField: 'name',
+    searchField: ['name', 'email'],
+	preload: true,
+	highlight: true,
+    options: [
+        {email: 'brian@thirdroute.com', name: 'Brian Reavis'},
+        {email: 'nikola@tesla.com', name: 'Nikola Tesla'},
+        {email: 'shervin@tesla.com', name: 'Shervin Tesla'},
+        {email: 'someone@gmail.com'}
+    ],
+    render: {
+        item: function(item, escape) {
+            return '<div class="delete">' +
+				(item.name ? '<span class="name">' + escape(item.name) + '</span>' : '') +
+                (item.email ? '<br/><span class="email">' + escape(item.email) + '</span>' : '') +
+            '</div>';
+        },
+        option: function(item, escape) {
+            var label = item.name || item.email;
+            var caption = item.name ? item.email : null;
+            return '<div>' +
+                '<span class="label">' + escape(label) + '</span><br/>' +
+                (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+            '</div>';
+        }
+    },
+    createFilter: function(input) {
+        var match, regex;
+
+        // email@address.com
+        regex = new RegExp('^' + REGEX_EMAIL + '$', 'i');
+        match = input.match(regex);
+        if (match) return !this.options.hasOwnProperty(match[0]);
+
+        // name <email@address.com>
+        regex = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
+        match = input.match(regex);
+        if (match) return !this.options.hasOwnProperty(match[2]);
+
+        return false;
+    },
+});
+
+var control = selectize[0].selectize;
+
+</script>
+</body>
+
+
+
+</html>

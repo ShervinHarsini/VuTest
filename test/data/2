@@ -1,0 +1,17 @@
+{  
+   "productLabel":[  
+      {  
+         "name":"New"
+      },
+      {  
+         "name":"-20%"
+      }
+   ],
+   "image":"./img/product01.jpg",
+   "price":"32.50",
+   "oldPrice":"620.50",
+   "productName":"Bags 2",
+   "description": "",
+   "rating":"5",
+   "fk":"1"
+}
