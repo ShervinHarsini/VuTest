@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://morris.github.io/microdb/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="MicroDB is a minimalistic file-based JSON object database written in PHP.">
+    <meta name="keywords" content="MicroDB, Database, PHP, File-based, JSON">
+    <meta name="author" content="Morris Brodersen Rick de Graaff">
+
+    <title>MicroDB – A minimalistic file-based JSON object database written in PHP</title>
+
+    <link href="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/bootstrap-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/default.min.css">
+    <link href="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <header id="header" role="banner">
+                <h1>MicroDB</h1>
+
+                <p>A minimalistic file-based JSON object database written in PHP</p>
+
+                <nav id="nav" role="navigation">
+                    <ul>
+                        <li><b>Guide</b>
+                            <ul>
+                                <li><a href="http://morris.github.io/microdb/#introduction" class="active">Introduction</a></li>
+                                <li><a href="http://morris.github.io/microdb/#indices">Indices</a></li>
+                                <li><a href="http://morris.github.io/microdb/#events">Events</a></li>
+                                <li><a href="http://morris.github.io/microdb/#tests">Tests</a></li>
+                                <li><a href="http://morris.github.io/microdb/#license">License</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>Classes</b>
+                            <ul>
+                                <li><a href="http://morris.github.io/microdb/#Database">Database</a></li>
+                                <li><a href="http://morris.github.io/microdb/#Index">Index</a></li>
+                                <li><a href="http://morris.github.io/microdb/#Cache">Cache</a></li>
+                                <li><a href="http://morris.github.io/microdb/#Event">Event</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <main id="main" role="main">
+                <section id="introduction" class="guide" style="display: block;">
+                    <h2>Introduction</h2>
+
+                    <p>MicroDB is a minimalistic file-based JSON object database written in PHP.</p>
+
+                    <p>Find the full, open source code at <a href="https://github.com/morris/microdb">GitHub</a>.</p>
+
+                    <h3>Features</h3>
+
+                    <ul>
+                        <li>Stores JSON objects as plain files</li>
+                        <li>Concurrency safe</li>
+                        <li>Arbitrary indices using custom key functions</li>
+                        <li>Listen to database operations through events</li>
+                        <li>Synchronize arbitrary operations</li>
+                    </ul>
+
+                    <h3>Basics</h3>
+
+                    <p>The following code demonstrates all basic operations on a MicroDB database.</p>
+<pre><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span>
+
+    <span class="hljs-variable">$db</span> = <span class="hljs-keyword">new</span> \MicroDB\Database(<span class="hljs-string">'data/posts'</span>); <span class="hljs-comment">// data directory</span>
+
+    <span class="hljs-comment">// create an item</span>
+    <span class="hljs-comment">// id is an auto incrementing integer</span>
+    <span class="hljs-variable">$id</span> = <span class="hljs-variable">$db</span>-&gt;create(<span class="hljs-keyword">array</span>(
+    <span class="hljs-string">'title'</span> =&gt; <span class="hljs-string">'Lorem ipsum'</span>,
+    <span class="hljs-string">'body'</span> =&gt; <span class="hljs-string">'At vero eos et accusam et justo duo dolores et ea rebum.'</span>
+    ));
+
+    <span class="hljs-comment">// load an item</span>
+    <span class="hljs-variable">$post</span> = <span class="hljs-variable">$db</span>-&gt;load(<span class="hljs-variable">$id</span>);
+
+    <span class="hljs-comment">// save an item</span>
+    <span class="hljs-variable">$post</span>[<span class="hljs-string">'tags'</span>] = <span class="hljs-keyword">array</span>(<span class="hljs-string">'lorem'</span>, <span class="hljs-string">'ipsum'</span>);
+    <span class="hljs-variable">$db</span>-&gt;save(<span class="hljs-variable">$id</span>, <span class="hljs-variable">$post</span>);
+
+    <span class="hljs-comment">// find items</span>
+    <span class="hljs-variable">$posts</span> = <span class="hljs-variable">$db</span>-&gt;find(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(<span class="hljs-variable">$post</span>)</span> {</span>
+    <span class="hljs-keyword">return</span> is_array(@<span class="hljs-variable">$post</span>[<span class="hljs-string">'tags'</span>]) &amp;&amp; in_array(<span class="hljs-string">'ipsum'</span>, @<span class="hljs-variable">$post</span>[<span class="hljs-string">'tags'</span>]);
+    });
+
+    <span class="hljs-keyword">foreach</span>(<span class="hljs-variable">$posts</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$id</span> =&gt; <span class="hljs-variable">$post</span>) {
+    print_r(<span class="hljs-variable">$post</span>);
+    }
+
+    <span class="hljs-comment">// delete an item</span>
+    <span class="hljs-variable">$db</span>-&gt;delete(<span class="hljs-variable">$id</span>);</span></code></pre>
+
+                    <h3>Requirements</h3>
+
+                    <p>PHP 5.3+</p>
+
+
+                    <h3>Installation</h3>
+
+                    <p>The composer package name is <code>morris/microdb</code>. You can also download or
+                        fork the <a href="https://github.com/morris/microdb">GitHub repository</a>.</p>
+                </section>
+
+                <section id="indices" class="guide" style="display: none;">
+                    <h2>Indices</h2>
+
+                    <p>An index maps some scalar value to one or more database IDs. This
+                        mapping can be used to find objects more quickly.</p>
+
+                    <p>Indices must be created before any database operation to work.
+                        Usually you just create them directly after creating the database.
+</p><pre><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span>
+
+    <span class="hljs-comment">// create database</span>
+    <span class="hljs-variable">$db</span> = <span class="hljs-keyword">new</span> \MicroDB\Database(<span class="hljs-string">'data/users'</span>);
+
+    <span class="hljs-comment">// create index</span>
+    <span class="hljs-comment">// maps the "email" attribute of any data object</span>
+    <span class="hljs-comment">// updates itself whenever an object is saved or deleted</span>
+    <span class="hljs-variable">$emailIndex</span> = <span class="hljs-keyword">new</span> \MicroDB\Index(<span class="hljs-variable">$db</span>, <span class="hljs-string">'email'</span>, <span class="hljs-string">'email'</span>);
+
+    <span class="hljs-comment">// using the index, you can quickly find items</span>
+    <span class="hljs-comment">// this is faster than using $db-&gt;find(array('email' =&gt; 'foo@bar.de'));</span>
+    <span class="hljs-variable">$foo</span> = <span class="hljs-variable">$emailIndex</span>-&gt;first(<span class="hljs-string">'foo@bar.de'</span>);
+
+    <span class="hljs-comment">// let's create a more complex index</span>
+    <span class="hljs-comment">// this index keeps track of the number of items on users' todo lists</span>
+    <span class="hljs-variable">$todoIndex</span> = <span class="hljs-keyword">new</span> \MicroDB\Index(<span class="hljs-variable">$db</span>, <span class="hljs-string">'todo'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(<span class="hljs-variable">$user</span>)</span> {</span>
+    <span class="hljs-keyword">return</span> count(<span class="hljs-variable">$user</span>[<span class="hljs-string">'todo'</span>]);
+    });
+
+    <span class="hljs-comment">// then we can find all users with at least 10 tasks</span>
+    <span class="hljs-variable">$users</span> = <span class="hljs-variable">$todoIndex</span>-&gt;find(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(<span class="hljs-variable">$todo</span>)</span> {</span> <span class="hljs-keyword">return</span> <span class="hljs-variable">$todo</span> &gt;= <span class="hljs-number">10</span>; });
+</span></code></pre>
+
+                    <p>Note that the <code>Database</code> class does not use <code>Index</code> directly. Indices
+                        work by listening to <a href="http://morris.github.io/microdb/#events">database events</a> and are
+                        stored as database objects.</p>
+
+                </section>
+
+                <section id="events" class="guide" style="display: none;">
+
+                    <h2>Events</h2>
+
+                    <p>The following events are triggered by MicroDB:</p>
+
+<pre>beforeSave
+saved
+beforeLoad
+loaded
+beforeDelete
+deleted</pre>
+
+                    <p>Handlers of these events receive an object of class <a href="http://morris.github.io/microdb/#Event">MicroDB\Event</a>
+                        as argument with properties <code>id</code> and possibly <code>data</code>.</p>
+
+                    <div class="alert alert-info">Note that IDs starting with an underscore
+                        are not getting any of these events because they are considered
+                        hidden, e.g. index data files.
+                    </div>
+
+                    <p>For example, the following code prevents modifications on user
+                        objects unless you are an admin:</p>
+
+<pre><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span>
+
+    <span class="hljs-variable">$db</span>-&gt;on(<span class="hljs-string">'beforeSave, beforeDelete'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(<span class="hljs-variable">$event</span>)</span> <span class="hljs-title">use</span> <span class="hljs-params">(<span class="hljs-variable">$app</span>)</span> {</span>
+    <span class="hljs-keyword">if</span>(<span class="hljs-variable">$data</span>[<span class="hljs-string">'type'</span>] === <span class="hljs-string">'user'</span> &amp;&amp; !<span class="hljs-variable">$app</span>-&gt;isAdmin())
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> \<span class="hljs-keyword">Exception</span>(
+    <span class="hljs-string">'Sorry, only admins are allowed to modify user data.'</span>
+    );
+    });</span></code></pre>
+
+                    <p>In the next example, the IDs of items are automatically injected after loading:</p>
+
+<pre><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span>
+
+    <span class="hljs-variable">$db</span>-&gt;on(<span class="hljs-string">'loaded'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(<span class="hljs-variable">$event</span>)</span> <span class="hljs-title">use</span> <span class="hljs-params">(<span class="hljs-variable">$app</span>)</span> {</span>
+    <span class="hljs-variable">$event</span>-&gt;data[<span class="hljs-string">'id'</span>] = <span class="hljs-variable">$event</span>-&gt;id;
+    });</span></code></pre>
+
+                    <p>You can also trigger events manually and unbind handlers:</p>
+
+<pre><code class=" hljs xml"><span class="php"><span class="hljs-preprocessor">&lt;?php</span>
+
+    <span class="hljs-variable">$handler</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(<span class="hljs-variable">$arg</span>)</span> {</span>
+    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$arg</span>;
+    };
+
+    <span class="hljs-comment">// bind to custom event</span>
+    <span class="hljs-variable">$db</span>-&gt;on(<span class="hljs-string">'hello'</span>, <span class="hljs-variable">$handler</span>);
+
+    <span class="hljs-comment">// trigger an event with arguments</span>
+    <span class="hljs-variable">$db</span>-&gt;trigger(<span class="hljs-string">'hello'</span>, <span class="hljs-string">'Hello World'</span>);
+
+    <span class="hljs-comment">// unbind a specific handler</span>
+    <span class="hljs-variable">$db</span>-&gt;off(<span class="hljs-variable">$handler</span>);
+
+    <span class="hljs-comment">// unbind all handlers of an event</span>
+    <span class="hljs-variable">$db</span>-&gt;off(<span class="hljs-string">'hello'</span>);</span></code></pre>
+
+                </section>
+
+                <section id="tests" class="guide" style="display: none;">
+                    <h2>Tests</h2>
+
+                    <p>Before running the tests you must run <code>composer update</code> in the microdb
+                        directory. This will install development dependencies like PHPUnit. Then, you can run
+                        the tests with <code>vendor/bin/phpunit tests</code>.</p>
+
+                    <p>To test the concurrent behavior you can run the tests twice in parallel:
+                        <code>vendor/bin/phpunit tests &amp; vendor/bin/phpunit tests</code></p>
+
+                </section>
+
+                <section id="license" class="guide" style="display: none;">
+                    <h2>License</h2>
+
+                    <p>MicroDB is licensed under the MIT License. Attribution is not required
+                        but very welcome!</p>
+
+<pre>The MIT License (MIT)
+
+Copyright (c) 2014 Morris Brodersen &lt;mb@morrisbrodersen.de&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</pre>
+                </section>
+
+                <section id="Database" class="class" style="display: none;">
+                    <h2>MicroDB\Database</h2>
+<pre><code class=" hljs java">&lt;?php
+
+    namespace MicroDB;
+
+    <span class="hljs-javadoc">/**
+    * A file-based JSON object database
+    */</span>
+    class Database {
+
+    <span class="hljs-javadoc">/**
+    * Constructor
+    */</span>
+    function __construct($path, $mode = <span class="hljs-number">0644</span>);
+
+    <span class="hljs-javadoc">/**
+    * Create an item with auto incrementing id
+    */</span>
+    function create($data = array());
+
+    <span class="hljs-javadoc">/**
+    * Save data to database
+    */</span>
+    function save($id, $data) ;
+
+    <span class="hljs-javadoc">/**
+    * Load data from database
+    */</span>
+    function load($id, $key = <span class="hljs-keyword">null</span>) ;
+
+    <span class="hljs-javadoc">/**
+    * Delete data from database
+    */</span>
+    function delete($id);
+
+    <span class="hljs-javadoc">/**
+    * Find data matching key-value map or callback
+    */</span>
+    function find($where = array(), $first = <span class="hljs-keyword">false</span>);
+
+    <span class="hljs-javadoc">/**
+    * Find first item key-value map or callback
+    */</span>
+    function first($where = <span class="hljs-keyword">null</span>);
+
+    <span class="hljs-javadoc">/**
+    * Checks wether an id exists
+    */</span>
+    function exists($id);
+
+    <span class="hljs-javadoc">/**
+    * Triggers "repair" event.
+    * On this event, applications should repair inconsistencies in the
+    * database, e.g. rebuild indices.
+    */</span>
+    function repair();
+
+    <span class="hljs-javadoc">/**
+    * Call a function for each id in the database
+    */</span>
+    function eachId($func);
+
+    <span class="hljs-javadoc">/**
+    * Is this id hidden, i.e. no events should be triggered?
+    * Hidden ids start with an underscore
+    */</span>
+    function hidden($id);
+
+    <span class="hljs-comment">// SYNCHRONIZATION</span>
+
+    <span class="hljs-javadoc">/**
+    * Call a function in a mutually exclusive way, locking on files
+    * A process will only block other processes and never block itself,
+    * so you can safely nest synchronized operations.
+    */</span>
+    function <span class="hljs-keyword">synchronized</span>($locks, $func);
+
+    <span class="hljs-javadoc">/**
+    * Get data path
+    */</span>
+    function getPath();
+
+    <span class="hljs-comment">// EVENTS</span>
+
+    <span class="hljs-javadoc">/**
+    * Bind a handler to an event, with given priority.
+    * Higher priority handlers will be executed earlier.
+    *<span class="hljs-javadoctag"> @param</span> string|array Event keys
+    *<span class="hljs-javadoctag"> @param</span> callable Handler
+    *<span class="hljs-javadoctag"> @param</span> number Priority of handler
+    */</span>
+    function on($event, $handler, $priority = <span class="hljs-number">0</span>);
+
+    <span class="hljs-javadoc">/**
+    * Unbind a handler on one, multiple or all events
+    *<span class="hljs-javadoctag"> @param</span> string|array Event keys, comma separated
+    *<span class="hljs-javadoctag"> @param</span> callable Handler
+    */</span>
+    function off($event, $handler = <span class="hljs-keyword">null</span>);
+
+    <span class="hljs-javadoc">/**
+    * Trigger one or more events with given arguments
+    *<span class="hljs-javadoctag"> @param</span> string|array Event keys, whitespace/comma separated
+    *<span class="hljs-javadoctag"> @param</span> mixed Optional arguments
+    */</span>
+    function trigger($event, $args = <span class="hljs-keyword">null</span>);
+    }
+</code></pre>
+                </section>
+
+                <section id="Index" class="class" style="display: none;">
+                    <h2>MicroDB\Index</h2>
+<pre><code class=" hljs java">&lt;?php
+
+    namespace MicroDB;
+
+    <span class="hljs-javadoc">/**
+    * Represents and manages an index on a database.
+    * An index maps keys to ids where keys are computed from items.
+    */</span>
+    class Index {
+
+    <span class="hljs-javadoc">/**
+    * Creates an index on a database with a name and an index key
+    * function. The index listens to database events to update itself.
+    */</span>
+    function __construct($db, $name, $keyFunc, $compare = <span class="hljs-keyword">null</span>);
+
+    <span class="hljs-javadoc">/**
+    * Find ids that match a key/callback
+    */</span>
+    function find($where, $first = <span class="hljs-keyword">false</span>);
+
+    <span class="hljs-javadoc">/**
+    * Get first matching id
+    */</span>
+    function first($where);
+
+    <span class="hljs-javadoc">/**
+    * Get slice of mapping, useful for paging
+    */</span>
+    function slice($offset = <span class="hljs-number">0</span>, $length = <span class="hljs-keyword">null</span>);
+
+    <span class="hljs-javadoc">/**
+    * Load items that match a key/callback
+    */</span>
+    function load($where, $first = <span class="hljs-keyword">false</span>);
+
+    <span class="hljs-javadoc">/**
+    * Load first matching item
+    */</span>
+    function loadFirst($where);
+
+    <span class="hljs-javadoc">/**
+    * Load slice of mapping
+    */</span>
+    function loadSlice($offset = <span class="hljs-number">0</span>, $length = <span class="hljs-keyword">null</span>);
+
+    <span class="hljs-javadoc">/**
+    * Update item in index
+    * Synchronized
+    */</span>
+    function update($id, $data);
+
+    <span class="hljs-javadoc">/**
+    * Delete item from index
+    * Synchronized
+    */</span>
+    function delete($id);
+
+    <span class="hljs-javadoc">/**
+    * Rebuild index completely
+    */</span>
+    function rebuild();
+
+    <span class="hljs-javadoc">/**
+    * Apply a synchronized operation on the index
+    */</span>
+    function apply($func);
+
+    <span class="hljs-javadoc">/**
+    * Load index
+    */</span>
+    function restore();
+
+    <span class="hljs-javadoc">/**
+    * Save index
+    */</span>
+    function store();
+
+    <span class="hljs-javadoc">/**
+    * Compute index key(s) of data
+    */</span>
+    function keys($data);
+
+    <span class="hljs-javadoc">/**
+    * Get name of index
+    */</span>
+    function getName();
+    }
+
+</code></pre>
+                </section>
+
+                <section id="Cache" class="class" style="display: none;">
+                    <h2>MicroDB\Cache</h2>
+<pre><code class=" hljs java">&lt;?php
+
+    namespace MicroDB;
+
+    <span class="hljs-javadoc">/**
+    * A cache for data loading
+    */</span>
+    class Cache {
+
+    <span class="hljs-javadoc">/**
+    * Constructor
+    */</span>
+    function __construct($db);
+
+    <span class="hljs-javadoc">/**
+    * Load a possibly cached item
+    */</span>
+    function load($id);
+
+    <span class="hljs-javadoc">/**
+    * Execute a function on each item (id, data)
+    */</span>
+    function each($func);
+    }
+
+</code></pre>
+                </section>
+
+                <section id="Event" class="class" style="display: none;">
+                    <h2>MicroDB\Event</h2>
+<pre><code class=" hljs java">&lt;?php
+
+    namespace MicroDB;
+
+    <span class="hljs-javadoc">/**
+    * A container for database events
+    */</span>
+    class Event {
+
+    <span class="hljs-javadoc">/**
+    * Constructor
+    */</span>
+    function __construct($db, $id, $data = <span class="hljs-keyword">null</span>);
+
+    var $db;
+    var $id;
+    var $data;
+    }
+
+</code></pre>
+                </section>
+            </main>
+
+            <footer id="footer" role="contentinfo">
+                MicroDB is © since 2014 Morris Brodersen · <a href="http://morrisbrodersen.de/" target="_blank">morrisbrodersen.de</a>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/jquery-1.11.1.min.js.download"></script>
+<script src="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/bootstrap.min.js.download"></script>
+<script src="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/main.js.download"></script>
+
+<script src="./MicroDB – A minimalistic file-based JSON object database written in PHP_files/highlight.min.js.download"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body></html>

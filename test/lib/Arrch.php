@@ -382,4 +382,50 @@ class Arrch
 		}
 		return $data;
 	}
+	
+	public static function searchTerm($decTerm)
+	{
+		  $pieces = explode(" ", $decTerm -> {'search'});
+		  $piecesOp = "~";
+		  if($pieces[0] === ""){
+			 $piecesOp = "!==";
+			 $pieces = "";
+		  };
+		  return array(words => $pieces, op => $piecesOp);
+	}
+	
+	public static function filterThis($name, $filter, $key)
+	{
+		  $color = array_values(array_filter($filter,function($filt) use ($name){
+			  return $filt -> {'name'} === $name;
+		  },0));
+		  $colors = array();
+		  foreach ($color[0] -> {"list"}  as &$value) {
+			array_push($colors, $value -> {'name'});
+		  };
+		  $colOp = "~";
+		  if(sizeof($colors) == 0){
+			 $colOp = "!==";
+			 $colors = "";
+		  };
+		return array(
+			color => $colors,
+			op => $colOp
+		);
+	}
+	
+	public static function getPrice($filter)
+	{
+		  $color = array_values(array_filter($filter,function($filt) {
+			  return $filt -> {'name'} === 'Price';
+		  },0));
+		  $min = $color[0]->{'list'}[0]->{'val'};
+		  $max = $color[0]->{'list'}[1]->{'val'};
+		  return array (
+			min => $min,
+			max => $max
+		  );
+	}
+	
+	
 }

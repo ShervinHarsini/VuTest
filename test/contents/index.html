@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>E-SHOP HTML Template</title>
+	<link rel="stylesheet" href="js/gridstack.min.css" />
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="css/style.css" />
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="css/selectize.css" />
+	<script src="https://cdn.jsdelivr.net/npm/medium-editor@latest/dist/js/medium-editor.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/medium-editor@latest/dist/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
+	<link rel="stylesheet" href="css/beagle.css" type="text/css" media="screen" charset="utf-8">
+
+</head>
+
+<body>
+	<div id="app">
+	
+	
+	<!-- fixed header -->
+
+	<!-- /fixed header -->
+	
+	<!-- HEADER -->
+	<header>
+		<!-- top Header -->
+		<div id="top-header">
+			<div class="container">
+				<div class="pull-left">
+					<span>{{selectedDict[settings.WelcomeMessage]}}</span>
+				</div>
+				<div class="pull-right">
+					<menu-component v-bind:settings = "settings" v-bind:lang="Lang" v-bind:currency="Currency" v-on:changelanguage = "changeLanguage" v-on:currencychange = "changeCurrency"></menu-component>
+				</div>
+			</div>
+		</div>
+		<!-- /top Header -->
+
+		<!-- header -->
+		<div class="fized">
+		<div id="header">
+			<div class="container">
+				<div class="pull-left">
+					<!-- Logo -->					
+					<logo src-img="logo.png" url="#/home"></logo>
+					<!-- /Logo -->
+					<!-- Search -->
+					<div class="header-search">
+					<search-component v-bind:dict = "selectedDict" v-bind:categories="settings.categories" v-on:set-search = "setSearch" v-bind:search = "search"></search-component>
+					</div>
+					<!-- /Search -->
+				</div>
+				<div class="pull-right">
+					<ul class="header-btns">
+						<!-- Account -->
+						<account-component v-on:logout="logout"></account-component>
+						<!-- /Account -->
+
+						<!-- Cart -->
+						<mycart-component></mycart-component>
+						<!-- /Cart -->
+
+						<!-- Mobile nav toggle-->
+						<li class="nav-toggle">
+							<button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
+						</li>
+						<!-- / Mobile nav toggle -->
+					</ul>
+				</div>
+			</div>
+			<!-- header -->
+		</div>
+		</div>
+		<!-- container -->
+	</header>
+	<!-- /HEADER -->
+
+	<!-- NAVIGATION -->
+	<div id="navigation" class="navigation">
+		<!-- container -->
+		<div class="container">
+			<div id="responsive-nav" class="responsive-nav">
+				<!-- category nav -->
+				<verticalmenu-component v-bind:showalways="!isHomepage()"></verticalmenu-component>
+				<!-- /category nav -->
+
+				<!-- menu nav -->
+					<menuitems-component></menuitems-component>
+				<!-- menu nav -->
+			</div>
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /NAVIGATION -->
+
+
+
+	<!-- section -->
+	<div class="bodyPage" v-bind:class="{'bodyPage' : isHomepage(), 'bodyPageHome' : !isHomepage()}">
+	<!-- BREADCRUMB -->
+	<div v-if="isHomepage()" id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="#">Home</a></li>
+				<li class="active">{{current | capitalize}}</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+	<div class="section" :style="{'padding-top': '0px'}">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+			<transition name="fade">
+			<router-view v-bind:is-loading="isLoading" v-bind:req-data="reqData" :search-term="search" v-on:userset="userset" :user="user"></router-view>
+			</transition>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	</div>
+	<!-- /section -->
+
+	<!-- FOOTER -->
+	<footer id="footer" class="section section-grey">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+				<!-- footer widget -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<!-- footer logo -->
+						<div class="footer-logo">
+							<a class="logo" href="#">
+		            <img src="./img/logo.png" alt="">
+		          </a>
+						</div>
+						<!-- /footer logo -->
+
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna</p>
+
+						<!-- footer social -->
+						<ul class="footer-social">
+							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+						</ul>
+						<!-- /footer social -->
+					</div>
+				</div>
+				<!-- /footer widget -->
+
+				<!-- footer widget -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<h3 class="footer-header">My Account</h3>
+						<ul class="list-links">
+							<li><a href="#">My Account</a></li>
+							<li><a href="#">My Wishlist</a></li>
+							<li><a href="#">Compare</a></li>
+							<li><a href="#">Checkout</a></li>
+							<li><a href="#">Login</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- /footer widget -->
+
+				<div class="clearfix visible-sm visible-xs"></div>
+
+				<!-- footer widget -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<h3 class="footer-header">Customer Service</h3>
+						<ul class="list-links">
+							<li><a href="#">About Us</a></li>
+							<li><a href="#">Shiping & Return</a></li>
+							<li><a href="#">Shiping Guide</a></li>
+							<li><a href="#">FAQ</a></li>
+						</ul>
+					</div>
+				</div>
+				<!-- /footer widget -->
+
+				<!-- footer subscribe -->
+				<div class="col-md-3 col-sm-6 col-xs-6">
+					<div class="footer">
+						<h3 class="footer-header">Stay Connected</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</p>
+						<form>
+							<div class="form-group">
+								<input class="input" placeholder="Enter Email Address">
+							</div>
+							<button class="primary-btn">Join Newslatter</button>
+						</form>
+					</div>
+				</div>
+				<!-- /footer subscribe -->
+			</div>
+			<!-- /row -->
+			<hr>
+			<!-- row -->
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center">
+					<!-- footer copyright -->
+					<div class="footer-copyright">
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						Copyright &copy;{{date}} All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					</div>
+					<!-- /footer copyright -->
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</footer>
+	<!-- /FOOTER -->
+</div>
+
+
+	<!-- jQuery Plugins -->
+
+
+	
+	
+	
+	
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/slick.min.js"></script>
+	<script src="js/nouislider.min.js"></script>
+	<script src="js/jquery.zoom.min.js"></script>
+	<script src="https://unpkg.com/web-animations-js@2.3.1/web-animations.min.js"></script>
+	<script src="https://unpkg.com/hammerjs@2.0.8/hammer.min.js"></script>
+	<script src="https://unpkg.com/muuri@0.7.1/dist/muuri.min.js"></script>
+	<script src="https://unpkg.com/muuri@0.7.1/dist/muuri.min.js"></script>
+	<script src="js/selectize.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/vue.js"></script>
+	<script src="js/vue-router.js"></script>
+	<script src="js/req.js"></script>
+	<script src="js/pages/home.js"></script>
+	<script src="js/pages/prods.js"></script>
+	<script src="js/pages/prod.js"></script>
+	<script src="js/pages/login.js"></script>
+	<script src="js/app.js"></script>
+	
+
+	<!-- <script type="text/javascript" src="js/jquery2.js"></script> -->
+	<!-- <script type="text/javascript" src="js/lodash.min.js"></script> -->
+	<!-- <script type="text/javascript" src="js/jquery-ui.min.js"></script> -->
+	<!-- <script type="text/javascript" src='js/gridstack.min.js'></script> -->
+	<!-- <script type="text/javascript" src='js/gridstack.jQueryUI.min.js'></script> -->
+
+</body>
+
+</html>

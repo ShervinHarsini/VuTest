@@ -1,0 +1,318 @@
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.3/cropper.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.4.3/cropper.css" />
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <style>
+  img {
+  max-width: 300px; /* This rule is very important, please do not ignore this! */
+}
+*{ margin: 0; padding: 0; }
+
+.error{ color: #B71C1C; }
+#userActions{
+    display: table-cell;
+    height: 150px;
+	width: 100%;
+    vertical-align: middle;
+    text-align: center;
+    color: #37474F;
+    font-weight: bold;
+    font-family: sans-serif;
+    background-color: #FFFFFF;
+    border: 4px dashed #b7b7b7;
+		position: relative;
+}
+#userActions input{
+	width: 150px;
+	margin: auto;
+
+}
+#imgPrime{ display: none; }
+
+.file-upload-btn {
+    width: 100%;
+    margin: 0;
+    color: #fff;
+    background: #37474f;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    border-bottom: 4px solid #556871;
+    transition: all .2s ease;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: 700;
+	cursor: pointer;
+}
+
+.file-upload-btn:hover{
+	background: #87968b;
+}
+.container{
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 510px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+p#fade {
+    top: 56px;
+    left: 185px;
+    position: absolute;
+}
+
+.modalopen {
+    border: dashed 2px #888;
+    /* max-width: 305px; */
+    /* height: 200px; */
+    border-radius: 10px;
+    display: block;
+    position: absolute;
+}
+  </style>
+</head>
+
+<body>
+<div style="position:relative; cursor: pointer">
+<div class="modalopen">
+<img id="myBtn" src="https://jbjtmarketers.org/wp-content/uploads/2017/11/upload.gif" style="
+    width: 106px;
+    padding: 10px;
+">
+</div>
+</div>
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+<div class="container">
+<div id="userActions">
+	<p id="fade"><i style="font-size:74pt" class="fa fa-cloud-upload"></i><br/>Drag &amp; Drop Image</p>
+	<input style="display:none" type="file" id="fileUpload" />
+	<div style="width:500px;overflow-y: auto;height: 200px;">
+	<img id="preview" src=""/>
+	</div>
+</div>
+<button onClick="download()" class="file-upload-btn">UPLOAD</button>
+</div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+
+<script>
+
+var image = document.getElementById('preview');
+var cropper = new Cropper(image, {
+  modal: true,
+});
+
+var saveData = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (data, fileName) {
+        var url = data;
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+}());
+
+
+function download(){
+saveData(cropper.getCroppedCanvas().toDataURL(), 'test.png');
+}
+ $('#userActions').on('dblclick',function(){jQuery('#fileUpload')[0].click()})
+
+ $("#myFile").on('change', function () {
+                readImage($(this)).done(function (base64Data) { cropper.replace(base64Data); });
+            });
+
+
+function readImage(inputElement) {
+    var deferred = $.Deferred();
+
+    var files = inputElement.get(0).files;
+
+    if (files && files[0]) {
+        var fr = new FileReader();
+        fr.onload = function (e) {
+            deferred.resolve(e.target.result);
+        };
+        fr.readAsDataURL(files[0]);
+    } else {
+        deferred.resolve(undefined);
+    }
+
+    return deferred.promise();
+}
+
+(function(){
+	// http://stackoverflow.com/questions/4083351/what-does-jquery-fn-mean
+	var $ = function( elem ){
+		if (!(this instanceof $)){
+      return new $(elem);
+		}
+		this.el = document.getElementById( elem );
+	};
+	window.$ = $;
+	$.prototype = {
+		onChange : function( callback ){
+			this.el.addEventListener('change', callback );
+			return this;
+		}
+	};
+})();
+
+/**
+// ||||||||||||||||||||||||||||||| \\
+//	Drag and Drop code for Upload
+// ||||||||||||||||||||||||||||||| \\
+**/
+var dragdrop = {
+	init : function( elem ){
+		elem.setAttribute('ondrop', 'dragdrop.drop(event)');
+		elem.setAttribute('ondragover', 'dragdrop.drag(event)' );
+	},
+	drop : function(e){
+		e.preventDefault();
+		var file = e.dataTransfer.files[0];
+		runUpload( file );
+	},
+	drag : function(e){
+		e.preventDefault();
+	}
+};
+
+/**
+// ||||||||||||||||||||||||||||||| \\
+//	Code to capture a file (image) 
+//  and upload it to the browser
+// ||||||||||||||||||||||||||||||| \\
+**/
+function runUpload( file ) {
+	// http://stackoverflow.com/questions/12570834/how-to-preview-image-get-file-size-image-height-and-width-before-upload
+	if( file.type === 'image/png'  || 
+			file.type === 'image/jpg'  || 
+		  file.type === 'image/jpeg' ||
+			file.type === 'image/gif'  ||
+			file.type === 'image/bmp'  ){
+		var reader = new FileReader(),
+				image = new Image();
+		reader.readAsDataURL( file );
+		reader.onload = function( _file ){
+			cropper.replace(_file.target.result)
+			jQuery('#fade').hide();
+		} // END reader.onload()
+	} // END test if file.type === image
+}
+
+/**
+// ||||||||||||||||||||||||||||||| \\
+//	window.onload fun
+// ||||||||||||||||||||||||||||||| \\
+**/
+window.onload = function(){
+	if( window.FileReader ){
+		// Connect the DIV surrounding the file upload to HTML5 drag and drop calls
+		dragdrop.init( $('userActions').el );
+		//	Bind the input[type="file"] to the function runUpload()
+		$('fileUpload').onChange(function(){ runUpload( this.files[0] ); });
+	}else{
+		// Report error message if FileReader is unavilable
+		var p   = document.createElement( 'p' ),
+				msg = document.createTextNode( 'Sorry, your browser does not support FileReader.' );
+		p.className = 'error';
+		p.appendChild( msg );
+		$('userActions').el.innerHTML = '';
+		$('userActions').el.appendChild( p );
+	}
+};
+</script>
+</body>
+
+</html>

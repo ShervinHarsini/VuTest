@@ -1,4 +1,5 @@
 <?php
+namespace Log;
 /**
  * Class Log
  * A really simple logging class that writes flat data to a file.
@@ -9,7 +10,10 @@
  */
 class Log {
 	private $handle, $dateFormat;
-	public function __construct($file, $mode = "a") {
+	public function __construct($file, $mode = "w") {
+ 		/*if(file_exists($file)){
+			unlink($file);
+		};  */
 		$this->handle = fopen($file, $mode);
 		$this->dateFormat = "d/M/Y H:i:s";
 	}
